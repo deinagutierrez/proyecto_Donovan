@@ -1,0 +1,18 @@
+## =======================
+# Variables de Entorno
+## =======================
+.env
+.env.*
+
+
+# =========================
+# 🔐 Secrets (credenciales)
+# =========================
+/secrets/*
+!/secrets/.gitkeep
+
+# =========================
+# 💾 Volúmenes / datos persistentes
+# =========================
+/volumes/*
+!/volumes/.gitkeep

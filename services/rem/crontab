@@ -1,0 +1,17 @@
+# cron para el servicio REM - Proyecto Donovan
+# -----------------------------------------------------------
+
+# Alarmas de Telegram: Cada hora al minuto 0
+#0 * * * * python3 /app/scripts/alarmasTelegram.py
+
+# Carga de datos REM (API JSON): Cada 10 minutos
+*/10 * * * *  python3 /app/scripts/insercion_rem.py
+
+# Guardar promedios/agregaciones: Cada hora al minuto 2
+2 * * * * python3 /app/scripts/guardado_tb_rem.py
+
+# Limpieza de datos temporales: Cada 12 horas (mediodía y medianoche)
+0 */12 * * * python3 /app/scripts/limpiar_tb_temp.py
+
+# Nota: ingesta_historica.py y sacarDatos.py se suelen ejecutar manualmente
+# o bajo demanda, por lo que no se incluyen en el cron rutinario.

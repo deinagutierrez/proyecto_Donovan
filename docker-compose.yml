@@ -1,0 +1,129 @@
+services:
+  # ----------------------------------------
+  # CAPA DE ALMACENAMIENTO
+  # ----------------------------------------
+  database:
+    image: postgres:18
+    container_name: postgres_core
+    #restart: always
+    environment:
+      TZ: America/Argentina/San_Luis
+      POSTGRES_USER: ${POSTGRES_USER}
+      # Lee la contraseña directamente del secreto en memoria
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - ./volumes/postgres-data:/var/lib/postgresql:Z
+      # Los scripts aquí se ejecutan en orden alfabético SOLO en la primera inicialización
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - pg_password
+    networks:
+      - donovan_net
+
+  # ----------------------------------------
+  # CAPA DE VISUALIZACIÓN
+  # ----------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana_ui
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_password
+    volumes:
+      - ./volumes/grafana-data:/var/lib/grafana:Z
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - database
+    networks:
+      - donovan_net
+
+  # ----------------------------------------
+  # CAPA DE PROCESAMIENTO Y MODELOS (R)
+  # ----------------------------------------
+  r_models:
+    build:
+      context: ./services/models-app
+    container_name: model_predictor
+    restart: always
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_USER: writer_user
+      DB_PASSWORD_FILE: /run/secrets/pg_writer_password
+    secrets:
+      - pg_writer_password
+    networks:
+      - donovan_net
+
+  # ----------------------------------------
+  # CAPA DE INGESTA Y AUTOMATIZACIÓN (REM)
+  # ----------------------------------------
+  rem_automation:
+    build:
+      context: ./services/rem
+    container_name: rem_worker
+    restart: always
+    depends_on:
+      - database
+    environment:
+      TZ: America/Argentina/San_Luis
+      DB_HOST: database
+      DB_NAME: db_rem
+      DB_PORT: 5432
+      DB_USER_WRITER: writer_user
+      DB_USER_READER: reader_user
+      DB_PASS_WRITER_FILE: /run/secrets/pg_writer_password
+      DB_PASS_READER_FILE: /run/secrets/pg_reader_password
+    secrets:
+      - pg_writer_password
+      - pg_reader_password
+    networks:
+      - donovan_net
+
+  # ----------------------------------------
+  # CAPA DE INGESTA (IoT)
+  # ----------------------------------------
+  iot_automation:
+    build:
+      context: ./services/sistema_iot
+    container_name: iot_worker
+    restart: always
+    depends_on:
+      - database
+    environment:
+      TZ: America/Argentina/San_Luis
+      DB_HOST: database
+      DB_NAME: sistema_iot
+      DB_PORT: 5432
+      DB_USER_WRITER: writer_user
+      DB_USER_READER: reader_user
+      DB_PASS_WRITER_FILE: /run/secrets/pg_writer_password
+      DB_PASS_READER_FILE: /run/secrets/pg_reader_password
+    secrets:-
+      - pg_writer_password
+      - pg_reader_password
+    networks:
+      - donovan_net
+
+# ----------------------------------------
+# CONFIGURACIÓN GLOBAL
+# ----------------------------------------
+networks:
+  donovan_net:
+    driver: bridge
+
+secrets:
+  pg_password:
+    file: ./secrets/pg_dba_password
+  grafana_password:
+    file: ./secrets/grafana_password
+  pg_writer_password:
+    file: ./secrets/pg_writer_password
+  pg_reader_password:
+    file: ./secrets/pg_reader_password

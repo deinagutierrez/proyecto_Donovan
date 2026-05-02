@@ -1,0 +1,13 @@
+# Las libreías (os, csv, datetime, logging) ya vienen incluidas 
+# Conectores de Base de Datos
+psycopg2==2.9.9
+psycopg[binary]
+
+# Procesamiento de Datos
+pandas==2.1.4
+
+# API e Ingesta
+requests==2.31.0
+
+# Gestión de Configuración
+python-dotenv==1.0.0
