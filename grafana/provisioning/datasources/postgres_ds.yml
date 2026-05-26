@@ -1,0 +1,23 @@
+# ./grafana/provisioning/datasources/postgres_ds.yml
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL-REM
+    type: postgres
+    # El nombre del servicio en Docker Compose y el puerto
+    url: postgres_core:5432
+    # El nombre de tu base de datos
+    database: db_rem
+    uid: bfganlrvg7u2ob
+    isDefault: true
+    # USAR SIEMPRE EL USUARIO DE SOLO LECTURA
+    user: reader_user
+    # La contraseña del usuario de lectura
+    secureJsonData:
+      password: '$__file{/run/secrets/pg_reader_password}'
+    jsonData:
+      database: db_rem  # <-- ¡EL FIX ESTÁ ACÁ!
+      sslmode: 'disable'
+      # Configura la versión para optimizar consultas (16 es compatible con 18)
+      postgresVersion: 1600
+      timescaledb: false

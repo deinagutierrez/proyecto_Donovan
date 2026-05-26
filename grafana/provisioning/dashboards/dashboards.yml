@@ -1,0 +1,27 @@
+# ./grafana/provisioning/dashboards/dashboards.yml
+apiVersion: 1
+
+providers:
+  # Proveedor para la carpeta Publicado
+  - name: 'Publicado'
+    orgId: 1
+    # Este 'folder' es el nombre que Grafana mostrará en su interfaz
+    folder: 'Publicado'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      # Ruta interna DENTRO del contenedor
+      path: /etc/grafana/provisioning/dashboards/Publicado
+
+  # Proveedor para la carpeta Test
+  - name: 'Test'
+    orgId: 1
+    # Este 'folder' es el nombre que Grafana mostrará en su interfaz
+    folder: 'Test'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      # Ruta interna DENTRO del contenedor
+      path: /etc/grafana/provisioning/dashboards/Test
