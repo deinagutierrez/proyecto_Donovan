@@ -7,8 +7,9 @@ def limpiar_datos_temporales():
     la tabla optimizada.
     """
     sql_delete = """
-        DELETE FROM datos_rem_temp
-        WHERE fecha_hora < NOW() - INTERVAL '12 hours';
+                DELETE FROM datos_rem_temp
+                WHERE fecha_hora < NOW() - INTERVAL '12 hours'
+                AND id_estacion != 85;
     """
 
     conn = None
