@@ -1,0 +1,1 @@
+4 * * * * Rscript /app/scripts/prediccion_temperatura.R
