@@ -9,6 +9,7 @@ services:
     environment:
       TZ: America/Argentina/San_Luis
       POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: db_rem
       # Lee la contraseña directamente del secreto en memoria
       POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
     ports:
@@ -19,6 +20,8 @@ services:
       - ./postgres/init:/docker-entrypoint-initdb.d:ro
     secrets:
       - pg_password
+      - pg_reader_password
+      - pg_writer_password
     networks:
       - donovan_net
 
@@ -42,7 +45,9 @@ services:
       - database
     networks:
       - donovan_net
-
+    secrets:
+      - pg_reader_password
+      - grafana_password
   # ----------------------------------------
   # CAPA DE PROCESAMIENTO Y MODELOS (R)
   # ----------------------------------------
@@ -54,7 +59,10 @@ services:
     depends_on:
       - database
     environment:
+      TZ: America/Argentina/San_Luis
       DB_HOST: database
+      DB_NAME: db_rem
+      DB_PORT: 5432
       DB_USER: writer_user
       DB_PASSWORD_FILE: /run/secrets/pg_writer_password
     secrets:
@@ -106,7 +114,7 @@ services:
       DB_USER_READER: reader_user
       DB_PASS_WRITER_FILE: /run/secrets/pg_writer_password
       DB_PASS_READER_FILE: /run/secrets/pg_reader_password
-    secrets:-
+    secrets:
       - pg_writer_password
       - pg_reader_password
     networks:
