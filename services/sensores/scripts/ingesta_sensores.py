@@ -5,7 +5,12 @@ from datetime import datetime
 
 # Librerías externas (instaladas por pip)
 import requests
+from dotenv import load_dotenv
 from psycopg2.extras import execute_values
+
+# Librerías externas (instaladas por pip)
+#import requests
+#from psycopg2.extras import execute_values
 
 
 # módulo propio

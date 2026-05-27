@@ -31,6 +31,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana_ui
+    user: "472:472"
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -100,7 +101,7 @@ services:
   # ----------------------------------------
   iot_automation:
     build:
-      context: ./services/sistema_iot
+      context: ./services/sensores
     container_name: iot_worker
     restart: always
     depends_on:

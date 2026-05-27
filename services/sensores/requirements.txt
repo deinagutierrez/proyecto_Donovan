@@ -1,0 +1,10 @@
+# Gestión de variables de entorno (usado en db_conexion.py e ingesta_sensores.py)
+python-dotenv==1.0.1
+
+# Cliente HTTP para consultar la API de ThingSpeak (usado en ingesta_sensores.py)
+requests==2.32.3
+
+# Adaptador de base de datos para PostgreSQL (usado en db_conexion.py)
+# Nota: Usamos psycopg2-binary para simplificar la compilación en contenedores slim,
+# o psycopg2 clásico si mantienes gcc y libpq-dev en el Dockerfile.
+psycopg2==2.9.9
