@@ -2,7 +2,7 @@
 # -----------------------------------------------------------
 
 # Alarmas de Telegram: Cada hora al minuto 0
-#0 * * * * python3 /app/scripts/alarmasTelegram.py
+0 * * * * python3 /app/scripts/alertas_donovan.py
 
 # Carga de datos REM (API JSON): Cada 10 minutos
 */10 * * * *  python3 /app/scripts/insercion_rem.py
