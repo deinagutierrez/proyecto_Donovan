@@ -5,7 +5,7 @@ services:
   database:
     image: postgres:18
     container_name: postgres_core
-    #restart: always
+    restart: unless-stopped
     environment:
       TZ: America/Argentina/San_Luis
       POSTGRES_USER: ${POSTGRES_USER}
@@ -39,6 +39,9 @@ services:
       GF_PROVISIONING_DATASOURCE_NAME: PostgreSQL-REM
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
       GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_password
+      GF_SERVER_DOMAIN: ${GRAFANA_DOMAIN}
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+      
     volumes:
       - ./volumes/grafana-data:/var/lib/grafana:Z
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
