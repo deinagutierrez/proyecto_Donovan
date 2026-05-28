@@ -16,3 +16,10 @@
 # =========================
 /volumes/*
 !/volumes/.gitkeep
+
+
+#=========================
+#Backups de Datos
+#========================
+postgres/init/04_datos_rem.sql
+postgres/init/05_datos_iot.sql
