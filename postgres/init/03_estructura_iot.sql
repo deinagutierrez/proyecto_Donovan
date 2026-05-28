@@ -2,7 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict JnbXCSfX3mCdsnkCSYWUKYhVmzuh9ubhCRtXyUlnqbqk8irfTJc6qFRoLSdxrZ5
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -26,6 +25,11 @@ SET default_table_access_method = heap;
 --
 -- Name: medicion; Type: TABLE; Schema: public; Owner: dba
 --
+
+
+CREATE DATABASE sistema_iot;
+ALTER DATABASE sistema_iot OWNER TO dba;
+\connect sistema_iot
 
 CREATE TABLE public.medicion (
     id_sensor integer NOT NULL,
@@ -322,5 +326,4 @@ ALTER DEFAULT PRIVILEGES FOR ROLE dba IN SCHEMA public GRANT SELECT,INSERT,DELET
 -- PostgreSQL database dump complete
 --
 
-\unrestrict JnbXCSfX3mCdsnkCSYWUKYhVmzuh9ubhCRtXyUlnqbqk8irfTJc6qFRoLSdxrZ5
 
